@@ -24,37 +24,18 @@ if st.checkbox("Show Raw Data"):
 
 # Sidebar Filters
 st.sidebar.header("Filter Options")
-
-# Gender filter
 gender_options = ["All"] + df["Sex"].unique().tolist()
 gender = st.sidebar.selectbox("Select Gender", options=gender_options)
 
-# Pclass filter
 pclass_options = ["All"] + sorted(df["Pclass"].unique().tolist())
 pclass = st.sidebar.selectbox("Select Passenger Class", options=pclass_options)
 
-# Age Range Slicer
-min_age = int(df["Age"].min())
-max_age = int(df["Age"].max())
-age_range = st.sidebar.slider("Select Age Range", min_value=min_age, max_value=max_age, value=(min_age, max_age))
-
-# Fare Range Slicer
-min_fare = float(df["Fare"].min())
-max_fare = float(df["Fare"].max())
-fare_range = st.sidebar.slider("Select Fare Range", min_value=float(min_fare), max_value=float(max_fare), value=(min_fare, max_fare))
-
 # Apply Filters
 filtered_df = df.copy()
-
 if gender != "All":
     filtered_df = filtered_df[filtered_df["Sex"] == gender]
 if pclass != "All":
     filtered_df = filtered_df[filtered_df["Pclass"] == pclass]
-
-filtered_df = filtered_df[
-    (filtered_df["Age"].between(age_range[0], age_range[1], inclusive="both")) &
-    (filtered_df["Fare"].between(fare_range[0], fare_range[1], inclusive="both"))
-]
 
 # Preview Filtered Data
 st.subheader("🔍 Filtered Data Preview")
@@ -132,7 +113,7 @@ with tab2:
 with tab3:
     st.subheader("Correlation Heatmap")
     numeric_df = filtered_df.select_dtypes(include=["number"])
-    fig7, ax7 = plt.subplots(figsize=(6, 3))
+    fig7, ax7 = plt.subplots(figsize=(6, 3))  # compact heatmap
     sns.heatmap(numeric_df.corr(), annot=True, cmap="coolwarm", fmt=".2f", ax=ax7, cbar=False, square=True)
     ax7.set_title("Feature Correlation", fontsize=12)
     fig7.tight_layout(pad=0.5)

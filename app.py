@@ -1,36 +1,28 @@
-# app.py
-
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
-# Page Config
-st.set_page_config(page_title="Titanic EDA Dashboard", layout="wide")
+# Assume df already loaded and contains a "Date" column
+df["Year"] = df["Date"].dt.year
+df["Month"] = df["Date"].dt.month
+df["Day"] = df["Date"].dt.day
 
-# Title
-st.title("🚢 Titanic Data Analytics Dashboard")
+st.title("Date-based Visuals")
 
-# Load Data
-df = pd.read_csv("cleaned_titanic.csv")
+# 📅 Monthly Distribution
+monthly_counts = df["Month"].value_counts().sort_index()
+fig1, ax1 = plt.subplots()
+ax1.bar(monthly_counts.index, monthly_counts.values)
+ax1.set_title("Records per Month")
+ax1.set_xlabel("Month")
+ax1.set_ylabel("Count")
+st.pyplot(fig1)
 
-# Show Data
-if st.checkbox("Show Raw Data"):
-    st.dataframe(df)
-
-# Sidebar Filters
-st.sidebar.header("Filter Options")
-gender = st.sidebar.selectbox("Select Gender", options=df["Sex"].unique())
-pclass = st.sidebar.selectbox("Select Passenger Class", options=df["Pclass"].unique())
-
-# Apply filters
-filtered_df = df[(df["Sex"] == gender) & (df["Pclass"] == pclass)]
-
-st.subheader("Filtered Data Preview")
-st.write(filtered_df.head())
-
-# Visualization
-st.subheader("Survival Count by Gender")
-fig, ax = plt.subplots()
-sns.countplot(data=filtered_df, x="Survived", hue="Sex", ax=ax)
-st.pyplot(fig)
+# 📆 Yearly Distribution
+yearly_counts = df["Year"].value_counts().sort_index()
+fig2, ax2 = plt.subplots()
+ax2.plot(yearly_counts.index, yearly_counts.values, marker='o')
+ax2.set_title("Records per Year")
+ax2.set_xlabel("Year")
+ax2.set_ylabel("Count")
+st.pyplot(fig2)

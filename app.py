@@ -109,3 +109,4 @@ elif selected_page == "Sheet 2: Passenger Insights":
         sns.violinplot(data=filtered_df, x="Pclass", y="Fare", ax=ax6)
         ax6.set_title("Fare Spread by Passenger Class")
         st.pyplot(fig6)
+

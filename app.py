@@ -1,4 +1,6 @@
-<body style="background: url('assets/titanic.jpg') no-repeat center center fixed; 
-             background-size: cover;">
-  <h1>🚢 Titanic Project</h1>
-</body>
+<p align="center">
+  <img src="assets/titanic.jpg" alt="Titanic banner">
+</p>
+
+<h1 align="center">🚢 Titanic Dashboard</h1>
+<p align="center">Welcome to my project!</p>

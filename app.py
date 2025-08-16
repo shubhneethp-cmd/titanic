@@ -1,1 +1,2 @@
-[Titanic](assets/titanic.jpg)
+(assets/titanic.jpg)
+

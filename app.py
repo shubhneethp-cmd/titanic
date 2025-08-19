@@ -31,14 +31,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Show Data in Box
-with st.container():
-    st.markdown("<div class='box'>", unsafe_allow_html=True)
-    st.subheader("📂 Raw Data")
-    if st.checkbox("Show Raw Data"):
-        st.dataframe(df)
-    st.markdown("</div>", unsafe_allow_html=True)
-
 # Sidebar Filters Box
 with st.sidebar:
     st.header("🔍 Filter Options")
@@ -48,15 +40,24 @@ with st.sidebar:
 # Apply filters
 filtered_df = df[(df["Sex"] == gender) & (df["Pclass"] == pclass)]
 
-# Filtered Data Preview Box
-with st.container():
+# --- Layout in 2 Boxes (Columns) ---
+col1, col2 = st.columns(2)
+
+# Left Column (Raw Data + Filtered Preview)
+with col1:
+    st.markdown("<div class='box'>", unsafe_allow_html=True)
+    st.subheader("📂 Raw Data")
+    if st.checkbox("Show Raw Data"):
+        st.dataframe(df)
+    st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("<div class='box'>", unsafe_allow_html=True)
     st.subheader("📊 Filtered Data Preview")
     st.write(filtered_df.head())
     st.markdown("</div>", unsafe_allow_html=True)
 
-# Visualization Box
-with st.container():
+# Right Column (Visualization)
+with col2:
     st.markdown("<div class='box'>", unsafe_allow_html=True)
     st.subheader("📦 Survival Count by Gender")
     fig, ax = plt.subplots()

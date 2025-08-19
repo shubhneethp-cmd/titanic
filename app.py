@@ -34,24 +34,24 @@ st.markdown(
 # Sidebar Filters Box
 with st.sidebar:
     st.header("🔍 Filter Options")
-    # Instead of selectbox, use slider
-    gender_choice = st.slider(
-        "Select Gender View",
-        min_value=0,
-        max_value=2,
-        value=0,
-        step=1,
-        format_func=lambda x: ["Both", "Male", "Female"][x]
-    )
+
+    # Slider for Age range
+    age_min, age_max = int(df["Age"].min()), int(df["Age"].max())
+    age_range = st.slider("Select Age Range", min_value=age_min, max_value=age_max, value=(age_min, age_max))
+
+    # Slider for Fare range
+    fare_min, fare_max = int(df["Fare"].min()), int(df["Fare"].max())
+    fare_range = st.slider("Select Fare Range", min_value=fare_min, max_value=fare_max, value=(fare_min, fare_max))
+
+    # Passenger class filter
     pclass = st.selectbox("Select Passenger Class", options=df["Pclass"].unique())
 
 # Apply filters
-if gender_choice == 0:   # Both
-    filtered_df = df[df["Pclass"] == pclass]
-elif gender_choice == 1: # Male
-    filtered_df = df[(df["Sex"] == "male") & (df["Pclass"] == pclass)]
-else:                    # Female
-    filtered_df = df[(df["Sex"] == "female") & (df["Pclass"] == pclass)]
+filtered_df = df[
+    (df["Age"].between(age_range[0], age_range[1])) &
+    (df["Fare"].between(fare_range[0], fare_range[1])) &
+    (df["Pclass"] == pclass)
+]
 
 # --- Layout in 2 Boxes (Columns) ---
 col1, col2 = st.columns(2)
@@ -69,37 +69,26 @@ with col1:
     st.write(filtered_df.head())
     st.markdown("</div>", unsafe_allow_html=True)
 
-# Right Column (Visualization)
+# Right Column (Visualization – Gender Wise Plots)
 with col2:
     st.markdown("<div class='box'>", unsafe_allow_html=True)
-    st.subheader("📦 Survival Count")
+    st.subheader("📦 Survival Count (Gender-wise)")
 
-    if gender_choice == 0:   # Both (side by side male + female)
-        gcol1, gcol2 = st.columns(2)
+    gcol1, gcol2 = st.columns(2)
 
-        with gcol1:
-            male_df = filtered_df[filtered_df["Sex"] == "male"]
-            fig, ax = plt.subplots()
-            sns.countplot(data=male_df, x="Survived", ax=ax, palette="Blues")
-            ax.set_title("Male Survival")
-            st.pyplot(fig)
-
-        with gcol2:
-            female_df = filtered_df[filtered_df["Sex"] == "female"]
-            fig, ax = plt.subplots()
-            sns.countplot(data=female_df, x="Survived", ax=ax, palette="Reds")
-            ax.set_title("Female Survival")
-            st.pyplot(fig)
-
-    elif gender_choice == 1: # Male only
+    # Male plot
+    with gcol1:
+        male_df = filtered_df[filtered_df["Sex"] == "male"]
         fig, ax = plt.subplots()
-        sns.countplot(data=filtered_df, x="Survived", ax=ax, palette="Blues")
+        sns.countplot(data=male_df, x="Survived", ax=ax, palette="Blues")
         ax.set_title("Male Survival")
         st.pyplot(fig)
 
-    else:  # Female only
+    # Female plot
+    with gcol2:
+        female_df = filtered_df[filtered_df["Sex"] == "female"]
         fig, ax = plt.subplots()
-        sns.countplot(data=filtered_df, x="Survived", ax=ax, palette="Reds")
+        sns.countplot(data=female_df, x="Survived", ax=ax, palette="Reds")
         ax.set_title("Female Survival")
         st.pyplot(fig)
 

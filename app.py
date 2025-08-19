@@ -56,11 +56,28 @@ with col1:
     st.write(filtered_df.head())
     st.markdown("</div>", unsafe_allow_html=True)
 
-# Right Column (Visualization)
+# Right Column (Visualization – Gender Wise Plots)
 with col2:
     st.markdown("<div class='box'>", unsafe_allow_html=True)
-    st.subheader("📦 Survival Count by Gender")
-    fig, ax = plt.subplots()
-    sns.countplot(data=filtered_df, x="Survived", hue="Sex", ax=ax)
-    st.pyplot(fig)
+    st.subheader("📦 Survival Count (Gender-wise)")
+
+    # Create two columns inside the box
+    gcol1, gcol2 = st.columns(2)
+
+    # Male plot
+    with gcol1:
+        male_df = filtered_df[filtered_df["Sex"] == "male"]
+        fig, ax = plt.subplots()
+        sns.countplot(data=male_df, x="Survived", ax=ax, palette="Blues")
+        ax.set_title("Male Survival")
+        st.pyplot(fig)
+
+    # Female plot
+    with gcol2:
+        female_df = filtered_df[filtered_df["Sex"] == "female"]
+        fig, ax = plt.subplots()
+        sns.countplot(data=female_df, x="Survived", ax=ax, palette="Reds")
+        ax.set_title("Female Survival")
+        st.pyplot(fig)
+
     st.markdown("</div>", unsafe_allow_html=True)

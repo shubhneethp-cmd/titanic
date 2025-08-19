@@ -69,14 +69,14 @@ with col1:
     st.write(filtered_df.head())
     st.markdown("</div>", unsafe_allow_html=True)
 
-# Right Column (Visualization – Gender Wise Plots)
+# Right Column (Visualization – Gender Wise + Age + Fare)
 with col2:
+    # Gender-wise survival plots
     st.markdown("<div class='box'>", unsafe_allow_html=True)
     st.subheader("📦 Survival Count (Gender-wise)")
 
     gcol1, gcol2 = st.columns(2)
 
-    # Male plot
     with gcol1:
         male_df = filtered_df[filtered_df["Sex"] == "male"]
         fig, ax = plt.subplots()
@@ -84,7 +84,6 @@ with col2:
         ax.set_title("Male Survival")
         st.pyplot(fig)
 
-    # Female plot
     with gcol2:
         female_df = filtered_df[filtered_df["Sex"] == "female"]
         fig, ax = plt.subplots()
@@ -92,4 +91,20 @@ with col2:
         ax.set_title("Female Survival")
         st.pyplot(fig)
 
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Age distribution plot
+    st.markdown("<div class='box'>", unsafe_allow_html=True)
+    st.subheader("📊 Age Distribution by Survival")
+    fig, ax = plt.subplots()
+    sns.histplot(data=filtered_df, x="Age", hue="Survived", multiple="stack", bins=20, ax=ax)
+    st.pyplot(fig)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Fare distribution plot
+    st.markdown("<div class='box'>", unsafe_allow_html=True)
+    st.subheader("💰 Fare Distribution by Survival")
+    fig, ax = plt.subplots()
+    sns.histplot(data=filtered_df, x="Fare", hue="Survived", multiple="stack", bins=20, ax=ax)
+    st.pyplot(fig)
     st.markdown("</div>", unsafe_allow_html=True)
